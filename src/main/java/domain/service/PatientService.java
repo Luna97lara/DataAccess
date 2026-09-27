@@ -6,6 +6,7 @@ import domain.mappers.PatientDTOMapper;
 import domain.model.PatientDTO;
 import jakarta.inject.Inject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PatientService {
@@ -19,25 +20,24 @@ public class PatientService {
 
     public List<PatientDTO> getPatients(){
         List<Patient> patients = jdbcPatientRepository.getAll();
-        PatientDTO patientDTO = patientMapper.entityDTO(patients);
-        return patients;
+        List<PatientDTO> patientDTOS = new ArrayList<>();
+        for (Patient patient : patients){
+            PatientDTO patientDTO = patientMapper.entityDTO(patient);
+        }
+        return patientDTOS;
     }
 
-    public void deletePatients(int id){
-        jdbcPatientRepository.delete(id);
+    public int addPatient(PatientDTO patientDTO){
+        return jdbcPatientRepository.add(patientMapper.dtoToEntity(patientDTO));
     }
 
-
-    public boolean login(String patient, String password) {
-        return jdbcPatientRepository.login(patient, password);
+    public void deletePatients(int idDelete){
+        jdbcPatientRepository.delete(idDelete);
     }
+
 
     public void updatePatient(PatientDTO patient) {
-        jdbcPatientRepository.update(patients);
+        jdbcPatientRepository.update(patientMapper.dtoToEntity(patient));
     }
 
-    public int addPatient(PatientDTO patientDTO) {
-        Patient patient=patientMapper.dtoToEntity(patientDTO);
-        return jdbcPatientRepository.add(patient);
-    }
 }

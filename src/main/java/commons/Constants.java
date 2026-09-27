@@ -15,4 +15,18 @@ public class Constants {
             10. Exit
             Enter your choice:
             """;
+    public static final String LIST_OF_PATIENTS = "List of patients: ";
+    public static final String DANI = "Dani";
+    public static final String DATEDANI = "2004-04-09";
+    public static final String PHONEDANI = "666777898";
+    public static final String USERDANI = "danul0";
+    public static final String PSWDANI = "quevedo2dam";
+    public static final String PSWMIKE = "ilovejustintimberlake";
+    public static final String USERMIKE = "mikerincones25";
+    public static final String PHONEMIKE = "696969696";
+    public static final String DATEMIKE = "1993-09-21";
+    public static final String MIKE = "Mike";
+    public static final String INSERT_ID = "Insert ID";
+    public static final String EXITMENU = "See you later!";
+    public static final String ERROR = "Invalid option. Please, try again";
 }

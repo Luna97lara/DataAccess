@@ -1,4 +1,4 @@
-package dao;
+package dao.Interfaces;
 
 import dao.model.Patient;
 
@@ -7,6 +7,6 @@ import java.util.List;
 public interface PatientRepository {
     List<Patient> getAll();
     int add(Patient patient);
-    void update(Patient patientDatabase);
+    void update(Patient patient);
     void delete(int idDelete);
 }
