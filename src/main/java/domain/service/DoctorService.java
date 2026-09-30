@@ -1,11 +1,10 @@
 package domain.service;
 
-import dao.Repositories.JDBCDoctorRepository;
+import dao.Repositories.JDBC.JDBCDoctorRepository;
 import dao.model.Doctor;
 import domain.mappers.DoctorDTOMapper;
 import domain.model.DoctorDTO;
 import jakarta.inject.Inject;
-import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;

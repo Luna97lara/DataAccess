@@ -29,4 +29,6 @@ public class Constants {
     public static final String INSERT_ID = "Insert ID";
     public static final String EXITMENU = "See you later!";
     public static final String ERROR = "Invalid option. Please, try again";
+    public static final String connected = "Connected to the database";
+    public static final String closingconnection = "Releasing all open resources...";
 }

@@ -1,8 +1,7 @@
-package dao.Repositories;
+package dao.Repositories.JDBC;
 
-import dao.Interfaces.CredentialRepository;
+import dao.Repositories.Interfaces.CredentialRepository;
 import dao.model.Credential;
-import domain.model.CredentialDTO;
 
 public class JDBCCredentialRepository implements CredentialRepository {
 

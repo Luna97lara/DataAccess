@@ -1,4 +1,4 @@
-package dao.Interfaces;
+package dao.Repositories.Interfaces;
 
 import dao.model.MedRecord;
 import dao.model.Patient;

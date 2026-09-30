@@ -1,6 +1,6 @@
-package dao.Repositories;
+package dao.Repositories.JDBC;
 
-import dao.Interfaces.MedRecordRepository;
+import dao.Repositories.Interfaces.MedRecordRepository;
 import dao.model.MedRecord;
 
 import java.util.ArrayList;

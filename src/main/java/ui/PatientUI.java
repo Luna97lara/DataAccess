@@ -1,9 +1,6 @@
 package ui;
 
-import commons.Constants;
-import dao.model.Patient;
 import domain.service.PatientService;
-import domain.model.CredentialDTO;
 import domain.model.PatientDTO;
 import jakarta.inject.Inject;
 

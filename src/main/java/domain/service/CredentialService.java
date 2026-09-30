@@ -1,13 +1,8 @@
 package domain.service;
 
-import dao.Interfaces.CredentialRepository;
-import dao.Repositories.JDBCCredentialRepository;
+import dao.Repositories.JDBC.JDBCCredentialRepository;
 import dao.model.Credential;
-import domain.model.CredentialDTO;
 import jakarta.inject.Inject;
-import lombok.*;
-
-import java.util.List;
 
 
 public class CredentialService {

@@ -12,8 +12,9 @@ public class DoctorUI {
     public DoctorUI(DoctorService doctorService){
         this.doctorService = doctorService;
     }
-
     public List<DoctorDTO> getAll(){
         return doctorService.getDoctors();
     }
+
+
 }

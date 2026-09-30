@@ -1,6 +1,6 @@
 package domain.service;
 
-import dao.Repositories.JDBCPatientRepository;
+import dao.Repositories.JDBC.JDBCPatientRepository;
 import dao.model.Patient;
 import domain.mappers.PatientDTOMapper;
 import domain.model.PatientDTO;

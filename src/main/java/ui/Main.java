@@ -14,6 +14,7 @@ public class Main {
     static void main() {
         SeContainerInitializer initializer = SeContainerInitializer.newInstance();
         final SeContainer container = initializer.initialize();
+
         PatientUI patientUI = container.select(PatientUI.class).get();
         DoctorUI doctorUI = container.select(DoctorUI.class).get();
         MedRecordUI medRecordUI = container.select(MedRecordUI.class).get();
