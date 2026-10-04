@@ -31,4 +31,8 @@ public class Constants {
     public static final String ERROR = "Invalid option. Please, try again";
     public static final String connected = "Connected to the database";
     public static final String closingconnection = "Releasing all open resources...";
+    public static final String DATABASE_ERROR="Error in the Database";
+    public static final String CRITICAL_ERROR = "Critical error with getAllPatients: ";
+    public static final String LOGIN = "Insert your username and your password: ";
+    public static final String LOGINERROR = "Login error";
 }

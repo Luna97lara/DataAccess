@@ -1,5 +1,6 @@
 package ui;
 
+import domain.model.CredentialDTO;
 import domain.service.CredentialService;
 import jakarta.inject.Inject;
 
@@ -10,8 +11,8 @@ public class CredentialUI {
         this.credentialService=credentialService;
     }
 
-    public boolean login(String username, String password){
-        return credentialService.login(username, password);
+    public boolean login(CredentialDTO credentialDTO) {
+        return credentialService.login(credentialDTO);
     }
 
 }

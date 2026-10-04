@@ -1,14 +1,18 @@
 package dao.Repositories.JDBC;
 
+import commons.Constants;
 import dao.Repositories.Interfaces.PatientRepository;
 import dao.Repositories.common.SQLQuery;
 import dao.mappers.PatientSQLMapper;
 import dao.model.Patient;
+import domain.exceptions.DataBaseError;
 import jakarta.inject.Inject;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JDBCPatientRepository implements PatientRepository {
     private List<Patient> patients=new ArrayList();
@@ -29,7 +33,8 @@ public class JDBCPatientRepository implements PatientRepository {
             ResultSet rs = st.executeQuery(SQLQuery.SELECT_FROM_PATIENTS);
             patients=patientSQLMapper.mapPatient(rs);
         }catch (SQLException ex){
-            ex.printStackTrace();
+            Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataBaseError(ex.getMessage());
         }
         return patients;
     }
@@ -42,8 +47,10 @@ public class JDBCPatientRepository implements PatientRepository {
             ps.setString(1, patient.getName());
             ps.setDate(2, Date.valueOf(patient.getBirthDate()));
             ps.setString(3, patient.getPhone());
+            ps.executeUpdate();
         } catch (SQLException ex){
-            ex.printStackTrace();
+            Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataBaseError(Constants.DATABASE_ERROR);
         }
         return id;
     }
@@ -55,8 +62,10 @@ public class JDBCPatientRepository implements PatientRepository {
            ps.setString(1, patient.getName());
            ps.setDate(2, Date.valueOf(patient.getBirthDate()));
            ps.setString(3, patient.getPhone());
+           ps.executeUpdate();
         } catch (SQLException ex){
-            ex.printStackTrace();
+            Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataBaseError(Constants.DATABASE_ERROR);
         }
 
     }
@@ -68,7 +77,8 @@ public class JDBCPatientRepository implements PatientRepository {
             ps.setInt(1, idDelete);
             ps.executeUpdate();
         }catch (SQLException ex){
-            ex.printStackTrace();
+            Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataBaseError(Constants.DATABASE_ERROR);
         }
     }
 

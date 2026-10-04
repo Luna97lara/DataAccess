@@ -10,4 +10,5 @@ public class SQLQuery
     public static final String INSERT_DOCTOR = "Insert into doctors (name, specialization, phone) values (?, ?, ?)";
     public static final String UPDATE_DOCTOR = "Update doctors set name = ?, specialization = ?, phone = ? where id = ?";
     public static final String DELETE_DOCTOR = "Delete doctors where id = ?";
+    public static final String CREDENTIAL_QUERY = "SELECT * FROM user_login WHERE username = ?";
 }

@@ -23,6 +23,7 @@ public class PatientService {
         List<PatientDTO> patientDTOS = new ArrayList<>();
         for (Patient patient : patients){
             PatientDTO patientDTO = patientMapper.entityDTO(patient);
+            patientDTOS.add(patientDTO);
         }
         return patientDTOS;
     }

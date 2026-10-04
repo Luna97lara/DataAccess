@@ -1,11 +1,17 @@
 package ui;
 
+import commons.Constants;
+import domain.exceptions.AppError;
+import domain.exceptions.DataBaseError;
 import domain.service.PatientService;
 import domain.model.PatientDTO;
 import jakarta.inject.Inject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PatientUI {
     private final PatientService patientService;
@@ -14,12 +20,51 @@ public class PatientUI {
     public PatientUI(PatientService patientService){
         this.patientService=patientService;
     }
-    public List<PatientDTO> getPatients(){
-        return patientService.getPatients();
+    public List<PatientDTO> getPatients() {
+        List<PatientDTO> patients =  new ArrayList<>();
+        try {
+            patients = patientService.getPatients();
+        } catch (DataBaseError ex) {
+            Logger.getLogger(PatientUI.class.getName()).log(Level.SEVERE, null, ex);
+
+        } catch (Exception e){
+            Logger.getLogger(PatientUI.class.getName()).log(Level.SEVERE, null, e);
+            throw new AppError(Constants.CRITICAL_ERROR +e.getMessage());
+        }
+        return patients;
     }
-    public int addPatient(PatientDTO patient){return patientService.addPatient(patient);};
-    public void updatePatient(PatientDTO patient){patientService.updatePatient(patient);}
-    public void deletePatients(int idDelete){patientService.deletePatients(idDelete);}
+    public int addPatient(PatientDTO patient) {
+        int id = 0;
+        try {
+            id = patientService.addPatient(patient);
+        } catch (DataBaseError ex) {
+            Logger.getLogger(PatientUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e){
+            Logger.getLogger(PatientUI.class.getName()).log(Level.SEVERE, null, e);
+            throw new AppError(Constants.CRITICAL_ERROR +e.getMessage());
+        }
+        return id;
+    }
+    public void updatePatient(PatientDTO patient) {
+        try {
+            patientService.updatePatient(patient);
+        } catch (DataBaseError error) {
+            Logger.getLogger(PatientUI.class.getName()).log(Level.SEVERE, null, error);
+        } catch (Exception e){
+            Logger.getLogger(PatientUI.class.getName()).log(Level.SEVERE, null, e);
+            throw new AppError(Constants.CRITICAL_ERROR +e.getMessage());
+        }
+    }
+    public void deletePatients(int idDelete){
+        try {
+            patientService.deletePatients(idDelete);
+        } catch (DataBaseError error) {
+            Logger.getLogger(PatientUI.class.getName()).log(Level.SEVERE, null, error);
+        }  catch (Exception e){
+            Logger.getLogger(PatientUI.class.getName()).log(Level.SEVERE, null, e);
+            throw new AppError(Constants.CRITICAL_ERROR +e.getMessage());
+        }
+    }
 
 
 }

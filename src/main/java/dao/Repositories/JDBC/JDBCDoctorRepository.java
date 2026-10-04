@@ -1,14 +1,18 @@
 package dao.Repositories.JDBC;
 
+import commons.Constants;
 import dao.Repositories.Interfaces.DoctorRepository;
 import dao.Repositories.common.SQLQuery;
 import dao.mappers.DoctorSQLMapper;
 import dao.model.Doctor;
+import domain.exceptions.DataBaseError;
 import jakarta.inject.Inject;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JDBCDoctorRepository implements DoctorRepository {
     private List<Doctor> doctors=new ArrayList();
@@ -30,7 +34,8 @@ public class JDBCDoctorRepository implements DoctorRepository {
             doctors=doctorSQLMapper.mapDoctor(rs);
 
         }catch (SQLException ex){
-            ex.printStackTrace();
+            Logger.getLogger(JDBCDoctorRepository.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataBaseError(Constants.DATABASE_ERROR);
         }
         return doctors;
     }
@@ -43,7 +48,8 @@ public class JDBCDoctorRepository implements DoctorRepository {
             ps.setString(2, doctor.getSpecialization());
             ps.setString(3, doctor.getPhone());
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(JDBCDoctorRepository.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataBaseError(Constants.DATABASE_ERROR);
         }
         return id;
     }
@@ -55,7 +61,8 @@ public class JDBCDoctorRepository implements DoctorRepository {
             ps.setString(2, doctor.getSpecialization());
             ps.setString(3, doctor.getPhone());
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(JDBCDoctorRepository.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataBaseError(Constants.DATABASE_ERROR);
         }
     }
 
@@ -65,7 +72,8 @@ public class JDBCDoctorRepository implements DoctorRepository {
             ps.setInt(1, id);
             ps.executeUpdate();
         }catch (SQLException ex){
-            ex.printStackTrace();
+            Logger.getLogger(JDBCDoctorRepository.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataBaseError(Constants.DATABASE_ERROR);
         }
     }
 
