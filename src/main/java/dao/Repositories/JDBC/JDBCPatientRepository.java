@@ -10,7 +10,9 @@ import jakarta.inject.Inject;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,27 +44,63 @@ public class JDBCPatientRepository implements PatientRepository {
     @Override
     public int add(Patient patient) {
         int id=0;
-        try (Connection con = dbConnection.getConnection();
-             PreparedStatement ps=con.prepareStatement(SQLQuery.INSERT_PATIENT)){
-            ps.setString(1, patient.getName());
-            ps.setDate(2, Date.valueOf(patient.getBirthDate()));
-            ps.setString(3, patient.getPhone());
-            ps.executeUpdate();
-        } catch (SQLException ex){
+        try (Connection con = dbConnection.getConnection()){
+            try {
+                PreparedStatement ps=con.prepareStatement(SQLQuery.INSERT_PATIENT);
+                PreparedStatement ps2=con.prepareStatement("");{
+                    con.setAutoCommit(false);
+                    ps.setString(1, patient.getName());
+                    ps.setDate(2, Date.valueOf(patient.getBirthDate()));
+                    ps.setString(3, patient.getPhone());
+                    ps.executeUpdate();
+                    con.commit();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    con.rollback();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            } finally {
+                con.setAutoCommit(true);
+            }
+
+            } catch (SQLException ex){
             Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
             throw new DataBaseError(Constants.DATABASE_ERROR);
         }
         return id;
     }
 
+
+
+
     @Override
     public void update(Patient patient) {
-        try(Connection con = dbConnection.getConnection();
-        PreparedStatement ps=con.prepareStatement(SQLQuery.UPDATE_PATIENT)) {
-           ps.setString(1, patient.getName());
-           ps.setDate(2, Date.valueOf(patient.getBirthDate()));
-           ps.setString(3, patient.getPhone());
-           ps.executeUpdate();
+        try(Connection con = dbConnection.getConnection()){
+            try {
+                PreparedStatement ps = con.prepareStatement(SQLQuery.UPDATE_PATIENT);
+                PreparedStatement ps2 = con.prepareStatement("");
+                {
+                    con.setAutoCommit(false);
+                    ps.setString(1, patient.getName());
+                    ps.setDate(2, Date.valueOf(patient.getBirthDate()));
+                    ps.setString(3, patient.getPhone());
+                    ps.executeUpdate();
+                    con.commit();
+
+                }
+            }catch (SQLException ex){
+                Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    con.rollback();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            } finally {
+                con.setAutoCommit(true);
+            }
         } catch (SQLException ex){
             Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
             throw new DataBaseError(Constants.DATABASE_ERROR);
@@ -72,10 +110,26 @@ public class JDBCPatientRepository implements PatientRepository {
 
     @Override
     public void delete(int idDelete) {
-        try(Connection con = dbConnection.getConnection();
-        PreparedStatement ps = con.prepareStatement(SQLQuery.DELETE_PATIENT)) {
-            ps.setInt(1, idDelete);
-            ps.executeUpdate();
+        try(Connection con = dbConnection.getConnection()){
+            try {
+                PreparedStatement ps = con.prepareStatement(SQLQuery.DELETE_PATIENT);
+                PreparedStatement ps2 = con.prepareStatement("");{
+                    con.setAutoCommit(false);
+                    ps.setInt(1, idDelete);
+                    ps.executeUpdate();
+                    con.commit();
+                }
+            }catch (SQLException e){
+                Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, e);
+                try{
+                    con.rollback();
+                } catch (SQLException ex) {
+                    throw new RuntimeException();
+                }
+            } finally {
+                con.setAutoCommit(true);
+        }
+
         }catch (SQLException ex){
             Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
             throw new DataBaseError(Constants.DATABASE_ERROR);
