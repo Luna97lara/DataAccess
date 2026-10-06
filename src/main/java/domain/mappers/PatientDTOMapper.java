@@ -1,11 +1,12 @@
 package domain.mappers;
 
+import dao.model.Credential;
 import dao.model.Patient;
 import domain.model.PatientDTO;
 
 public class PatientDTOMapper {
     public Patient dtoToEntity(PatientDTO patientDTO){
-        return new Patient(patientDTO.getId(), patientDTO.getName(), patientDTO.getBirthDate(), patientDTO.getPhone());
+        return new Patient(patientDTO.getId(), patientDTO.getName(), patientDTO.getBirthDate(), patientDTO.getPhone(), new Credential(patientDTO.getUserName(), patientDTO.getPassword()));
     }
 
 

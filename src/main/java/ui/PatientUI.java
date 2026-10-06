@@ -3,8 +3,10 @@ package ui;
 import commons.Constants;
 import domain.exceptions.AppError;
 import domain.exceptions.DataBaseError;
+import domain.exceptions.DuplicatedUsernameError;
 import domain.service.PatientService;
 import domain.model.PatientDTO;
+import jakarta.ejb.DuplicateKeyException;
 import jakarta.inject.Inject;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.logging.Logger;
 
 public class PatientUI {
     private final PatientService patientService;
+    private final Scanner scanner = new Scanner(System.in);
 
     @Inject
     public PatientUI(PatientService patientService){
@@ -37,6 +40,11 @@ public class PatientUI {
         int id = 0;
         try {
             id = patientService.addPatient(patient);
+        }catch (DuplicatedUsernameError ex){
+            IO.println(Constants.DUPLICATED_USERNAME);
+            String answer=scanner.nextLine().trim();
+            patient.setUserName(answer);
+            IO.println(patientService.addPatient(patient));
         } catch (DataBaseError ex) {
             Logger.getLogger(PatientUI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception e){

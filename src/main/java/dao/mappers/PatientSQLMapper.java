@@ -1,5 +1,6 @@
 package dao.mappers;
 
+import dao.model.Credential;
 import dao.model.Patient;
 
 import java.sql.ResultSet;

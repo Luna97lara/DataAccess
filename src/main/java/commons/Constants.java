@@ -35,4 +35,5 @@ public class Constants {
     public static final String CRITICAL_ERROR = "Critical error with getAllPatients: ";
     public static final String LOGIN = "Insert your username and your password: ";
     public static final String LOGINERROR = "Login error";
+    public static final String DUPLICATED_USERNAME = "Duplicated Username";
 }

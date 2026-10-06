@@ -6,6 +6,7 @@ import dao.Repositories.common.SQLQuery;
 import dao.mappers.PatientSQLMapper;
 import dao.model.Patient;
 import domain.exceptions.DataBaseError;
+import domain.exceptions.DuplicatedUsernameError;
 import jakarta.inject.Inject;
 
 import java.sql.*;
@@ -46,22 +47,33 @@ public class JDBCPatientRepository implements PatientRepository {
         int id=0;
         try (Connection con = dbConnection.getConnection()){
             try {
-                PreparedStatement ps=con.prepareStatement(SQLQuery.INSERT_PATIENT);
-                PreparedStatement ps2=con.prepareStatement("");{
+                PreparedStatement ps=con.prepareStatement(SQLQuery.INSERT_PATIENT, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps2=con.prepareStatement(SQLQuery.CREDENTIALS);{
                     con.setAutoCommit(false);
                     ps.setString(1, patient.getName());
                     ps.setDate(2, Date.valueOf(patient.getBirthDate()));
                     ps.setString(3, patient.getPhone());
                     ps.executeUpdate();
-                    con.commit();
+                    int affectedRows =ps2.executeUpdate();
+                    if (affectedRows>0){
+                        ResultSet rs=ps2.getGeneratedKeys();
+                        if(rs.next()){
+                            patient.setId(rs.getInt(1));
+                            ps2.setString(1, patient.getCredentials().getUsername());
+                            ps2.setString(2, patient.getCredentials().getPassword());
+                            ps2.setInt(3, patient.getId());
+                            ps2.executeUpdate();
+                            con.commit();
+                        }
+                    }
                 }
-            } catch (SQLException ex) {
+            } catch (SQLIntegrityConstraintViolationException ex) {
                 Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
-                try {
-                    con.rollback();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+                con.rollback();
+                throw new DuplicatedUsernameError(Constants.DUPLICATED_USERNAME);
+            } catch (SQLException e) {
+                con.rollback();
+                throw new RuntimeException(e);
             } finally {
                 con.setAutoCommit(true);
             }

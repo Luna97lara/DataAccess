@@ -17,7 +17,7 @@ public class Patient {
     private String name;
     private LocalDate birthDate;
     private String phone;
-
+    private Credential credentials;
 }
 
 
