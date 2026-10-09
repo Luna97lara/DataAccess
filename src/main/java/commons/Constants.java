@@ -36,4 +36,5 @@ public class Constants {
     public static final String LOGIN = "Insert your username and your password: ";
     public static final String LOGINERROR = "Login error";
     public static final String DUPLICATED_USERNAME = "Duplicated Username";
+    public static final String IDMISSMATCHING = "The ID doesn't exist";
 }
