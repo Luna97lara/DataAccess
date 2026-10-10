@@ -4,6 +4,7 @@ import commons.Constants;
 import domain.exceptions.AppError;
 import domain.exceptions.DataBaseError;
 import domain.exceptions.DuplicatedUsernameError;
+import domain.exceptions.ForeignKeyERROR;
 import domain.service.PatientService;
 import domain.model.PatientDTO;
 import jakarta.ejb.DuplicateKeyException;
@@ -65,7 +66,11 @@ public class PatientUI {
     }
     public void deletePatients(int idDelete){
         try {
-            patientService.deletePatients(idDelete);
+            patientService.deletePatients(idDelete, false);
+        } catch (ForeignKeyERROR f){
+            IO.println("This patient has medical records. Are you sure about the deletion? (Y/N)");
+            boolean confirm = scanner.nextLine().charAt(0) == 'Y';
+            patientService.deletePatients(idDelete, confirm);
         } catch (DataBaseError error) {
             Logger.getLogger(PatientUI.class.getName()).log(Level.SEVERE, null, error);
         }  catch (Exception e){

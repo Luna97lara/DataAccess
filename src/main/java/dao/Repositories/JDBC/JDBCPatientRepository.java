@@ -7,6 +7,7 @@ import dao.mappers.PatientSQLMapper;
 import dao.model.Patient;
 import domain.exceptions.DataBaseError;
 import domain.exceptions.DuplicatedUsernameError;
+import domain.exceptions.ForeignKeyERROR;
 import domain.exceptions.IdMissMatchingError;
 import jakarta.inject.Inject;
 
@@ -29,14 +30,13 @@ public class JDBCPatientRepository implements PatientRepository {
     }
 
     public List<Patient> getAll() {
-        List<Patient> patients=new ArrayList();
         try (Connection con = dbConnection.getConnection();
              Statement st = con.createStatement()){
             ResultSet rs = st.executeQuery(SQLQuery.SELECT_FROM_PATIENTS);
             patients=patientSQLMapper.mapPatient(rs);
         }catch (SQLException ex){
             Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
-            throw new DataBaseError(ex.getMessage());
+            throw new DataBaseError(Constants.DATABASE_ERROR);
         }
         return patients;
     }
@@ -85,8 +85,6 @@ public class JDBCPatientRepository implements PatientRepository {
     }
 
 
-//Transaction in update and delete
-
     @Override
     public void update(Patient patient) {
         try(Connection con = dbConnection.getConnection()){
@@ -112,7 +110,6 @@ public class JDBCPatientRepository implements PatientRepository {
                         }
                     }
                 }
-
             } catch (SQLIntegrityConstraintViolationException ex) {
                 Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
                 con.rollback();
@@ -131,35 +128,53 @@ public class JDBCPatientRepository implements PatientRepository {
     }
 
     @Override
-    public void delete(int idDelete) {
-        try(Connection con = dbConnection.getConnection()){
-            try {
-                PreparedStatement ps = con.prepareStatement("");
-                PreparedStatement ps2 = con.prepareStatement("");
-                PreparedStatement ps3 = con.prepareStatement("");
-                PreparedStatement ps4 = con.prepareStatement("");{
-                    con.setAutoCommit(false);
+    public void delete(int idDelete, boolean confirm) {
+        try (Connection con = dbConnection.getConnection()) {
+            con.setAutoCommit(false);
+            if (confirm) {
+                try (PreparedStatement ps = con.prepareStatement(SQLQuery.DELETE_MEDICATION);
+                     PreparedStatement ps2 = con.prepareStatement(SQLQuery.DELETE_MEDRECORD);) {
                     ps.setInt(1, idDelete);
+                    ps2.setInt(1, idDelete);
                     ps.executeUpdate();
-                    con.commit();
-                }
-            }catch (SQLException e){
-                Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, e);
-                try{
+                    ps2.executeUpdate();
+                } catch (SQLIntegrityConstraintViolationException ex) {
                     con.rollback();
-                } catch (SQLException ex) {
-                    throw new RuntimeException();
+                    throw new ForeignKeyERROR(Constants.FK_ERROR);
                 }
+            }
+            try (PreparedStatement psPatient = con.prepareStatement(SQLQuery.DELETE_PATIENT, Statement.RETURN_GENERATED_KEYS);
+                 PreparedStatement psPayment = con.prepareStatement(SQLQuery.DELETE_PATIENTPAYMENTS);
+                 PreparedStatement psAppointment = con.prepareStatement(SQLQuery.DELETE_APPOINTMENT);
+                 PreparedStatement psCredential = con.prepareStatement(SQLQuery.DELETE_CREDENTIALS);
+            ) {
+                psPatient.setInt(1, idDelete);
+                psPayment.setInt(1, idDelete);
+                psAppointment.setInt(1, idDelete);
+                psCredential.setInt(1, idDelete);
+                int rowsAffected = psPatient.executeUpdate();
+                psPayment.executeUpdate();
+                psAppointment.executeUpdate();
+                psCredential.executeUpdate();
+                con.commit();
+                if (rowsAffected == 0) {
+                        throw new IdMissMatchingError(Constants.IDMISSMATCHING);
+                }
+            } catch (SQLIntegrityConstraintViolationException ex) {
+                con.rollback();
+                Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
+                throw new ForeignKeyERROR(Constants.FK_ERROR);
             } finally {
                 con.setAutoCommit(true);
-        }
-
-        }catch (SQLException ex){
-            Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, e);
+            throw new ForeignKeyERROR(Constants.FK_ERROR);
+        } catch (SQLException | DataBaseError e) {
+            Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, e);
             throw new DataBaseError(Constants.DATABASE_ERROR);
+
         }
     }
-
-
 
 }

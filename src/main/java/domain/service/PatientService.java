@@ -32,8 +32,8 @@ public class PatientService {
         return jdbcPatientRepository.add(patientMapper.dtoToEntity(patientDTO));
     }
 
-    public void deletePatients(int idDelete){
-        jdbcPatientRepository.delete(idDelete);
+    public void deletePatients(int idDelete, boolean confirm){
+        jdbcPatientRepository.delete(idDelete, confirm);
     }
 
 
