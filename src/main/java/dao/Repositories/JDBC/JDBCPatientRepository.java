@@ -45,9 +45,8 @@ public class JDBCPatientRepository implements PatientRepository {
     public int add(Patient patient) {
         int id=0;
         try (Connection con = dbConnection.getConnection()){
-            try {
-                PreparedStatement ps=con.prepareStatement(SQLQuery.INSERT_PATIENT, Statement.RETURN_GENERATED_KEYS);
-                PreparedStatement ps2=con.prepareStatement(SQLQuery.INSERT_CREDENTIALS);{
+            try (PreparedStatement ps=con.prepareStatement(SQLQuery.INSERT_PATIENT, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps2=con.prepareStatement(SQLQuery.INSERT_CREDENTIALS)) {
                     con.setAutoCommit(false);
                     ps.setString(1, patient.getName());
                     ps.setDate(2, Date.valueOf(patient.getBirthDate()));
@@ -65,7 +64,6 @@ public class JDBCPatientRepository implements PatientRepository {
                             con.commit();
                         }
                     }
-                }
             } catch (SQLIntegrityConstraintViolationException ex) {
                 Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
                 con.rollback();

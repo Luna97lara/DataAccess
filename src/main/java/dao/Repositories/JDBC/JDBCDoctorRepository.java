@@ -43,7 +43,7 @@ public class JDBCDoctorRepository implements DoctorRepository {
         return doctors;
     }
 
-    public int add(Doctor doctor){
+    public int addDoctor(Doctor doctor){
         int id=0;
         try(Connection con = dbConnection.getConnection()) {
             try {
@@ -85,7 +85,7 @@ public class JDBCDoctorRepository implements DoctorRepository {
         return id;
     }
 
-    public void update(Doctor doctor){
+    public void updateDoctor(Doctor doctor){
         try (Connection con = dbConnection.getConnection()) {
             try {
                 PreparedStatement ps = con.prepareStatement(SQLQuery.UPDATE_DOCTOR);
@@ -125,7 +125,7 @@ public class JDBCDoctorRepository implements DoctorRepository {
         }
     }
 
-    public void delete(int id, boolean confirm){
+    public void deleteDoctor(int id, boolean confirm){
         try (Connection con = dbConnection.getConnection()) {
             con.setAutoCommit(false);
             if (confirm) {

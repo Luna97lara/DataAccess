@@ -21,14 +21,25 @@ public class DoctorService {
     }
 
     public List<DoctorDTO> getDoctors() {
-        List<DoctorDTO> doctorDTOS=new ArrayList<>();
         List<Doctor> doctors = doctorRepository.getAll();
+        List<DoctorDTO> doctorDTOS=new ArrayList<>();
         for (Doctor doctor : doctors) {
             DoctorDTO doctorDTO=doctorDTOMapper.entityToDto(doctor);
             doctorDTOS.add(doctorDTO);
         }
         return doctorDTOS;
+    }
 
+    public int addDoctor(DoctorDTO doctor){
+        return doctorRepository.addDoctor(doctorDTOMapper.dtoToEntity(doctor));
+    }
+
+    public void updateDoctor(DoctorDTO doctor){
+        doctorRepository.updateDoctor(doctorDTOMapper.dtoToEntity(doctor));
+    }
+
+    public void deleteDoctor(int id, boolean confirm){
+        doctorRepository.deleteDoctor(id, confirm);
     }
 
 }

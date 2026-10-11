@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,4 +16,5 @@ public class MedRecord {
     private int doctor_id;
     private String diagnosis;
     private LocalDate admission_date;
+    private List<String>medications;
 }

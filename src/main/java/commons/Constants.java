@@ -37,5 +37,5 @@ public class Constants {
     public static final String LOGINERROR = "Login error";
     public static final String DUPLICATED_USERNAME = "Duplicated Username";
     public static final String IDMISSMATCHING = "The ID doesn't exist";
-    public static final String FK_ERROR = "You can´t delete this patient: FK in another table";
+    public static final String FK_ERROR = "You can´t delete this user: FK in another table";
 }
