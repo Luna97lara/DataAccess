@@ -14,7 +14,7 @@ public class DoctorSQLMapper {
             while (rs.next()){
                 Doctor doctor=new Doctor();
                 doctor.setId(rs.getInt("doctor_id"));
-                doctor.setName(rs.getString("doctor_name"));
+                doctor.setName(rs.getString("name"));
                 doctor.setSpecialization(rs.getString("specialization"));
                 doctor.setPhone(rs.getString("phone"));
                 doctors.add(doctor);

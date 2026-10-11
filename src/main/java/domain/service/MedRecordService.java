@@ -38,7 +38,7 @@ public class MedRecordService {
         medRecordRepository.updateMedRecord(medRecordDTOMapper.dtoToEntity(medRecordDTO));
     }
 
-    public void deleteMedRecord(int idDelete){
-        medRecordRepository.deleteMedRecord(idDelete);
+    public void deleteMedRecord(int idDelete, boolean confirm){
+        medRecordRepository.deleteMedRecord(idDelete, confirm);
     }
 }

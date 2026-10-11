@@ -29,8 +29,8 @@ public class Constants {
     public static final String INSERT_ID = "Insert ID";
     public static final String EXITMENU = "See you later!";
     public static final String ERROR = "Invalid option. Please, try again";
-    public static final String connected = "Connected to the database";
-    public static final String closingconnection = "Releasing all open resources...";
+    public static final String CONNECTED = "Connected to the database";
+    public static final String CLOSINGCONECTION = "Releasing all open resources...";
     public static final String DATABASE_ERROR="Error in the Database";
     public static final String CRITICAL_ERROR = "Critical error with getAllPatients: ";
     public static final String LOGIN = "Insert your username and your password: ";
@@ -38,4 +38,7 @@ public class Constants {
     public static final String DUPLICATED_USERNAME = "Duplicated Username";
     public static final String IDMISSMATCHING = "The ID doesn't exist";
     public static final String FK_ERROR = "You can´t delete this user: FK in another table";
+    public static final String PATIENT_WITH_MEDRECORDS = "This patient has medical records. Are you sure about the deletion? (Y/N)";
+    public static final String DOCTOR_WITH_MEDRECORDS = "This doctor has medical records. Are you sure of the deletion? (Y/N)";
+    public static final String MEDRECORD_WITH_MEDICATIONS = "This medical record has medication associated. Are you sure about deletion? (Y/N)";
 }

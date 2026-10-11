@@ -68,7 +68,7 @@ public class PatientUI {
         try {
             patientService.deletePatients(idDelete, false);
         } catch (ForeignKeyERROR f){
-            IO.println("This patient has medical records. Are you sure about the deletion? (Y/N)");
+            IO.println(Constants.PATIENT_WITH_MEDRECORDS);
             boolean confirm = scanner.nextLine().charAt(0) == 'Y';
             patientService.deletePatients(idDelete, confirm);
         } catch (DataBaseError error) {

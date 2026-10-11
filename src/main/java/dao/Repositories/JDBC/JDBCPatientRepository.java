@@ -136,9 +136,9 @@ public class JDBCPatientRepository implements PatientRepository {
                     ps2.setInt(1, idDelete);
                     ps.executeUpdate();
                     ps2.executeUpdate();
-                } catch (SQLIntegrityConstraintViolationException ex) {
+                } catch (SQLException ex) {
                     con.rollback();
-                    throw new ForeignKeyERROR(Constants.FK_ERROR);
+                    throw new DataBaseError(Constants.DATABASE_ERROR);
                 }
             }
             try (PreparedStatement psPatient = con.prepareStatement(SQLQuery.DELETE_PATIENT, Statement.RETURN_GENERATED_KEYS);

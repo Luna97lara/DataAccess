@@ -27,6 +27,7 @@ public class Main {
             String username = sc.nextLine();
             String password = sc.nextLine();
             if (credentialUI.login(new CredentialDTO(username, password))) {
+                IO.println(Constants.CONNECTED);
                 Scanner scanner = new Scanner(System.in);
                 int option;
                 do {
@@ -37,10 +38,10 @@ public class Main {
                             IO.println(Constants.LIST_OF_PATIENTS + patientUI.getPatients());
                             break;
                         case 2:
-                            IO.println(patientUI.addPatient(new PatientDTO(0, Constants.DANI, LocalDate.parse(Constants.DATEDANI), Constants.PHONEDANI, 2, Constants.USERDANI, Constants.PSWDANI)));
+                            patientUI.addPatient(new PatientDTO(0, Constants.DANI, LocalDate.parse(Constants.DATEDANI), Constants.PHONEDANI, 2, Constants.USERDANI, Constants.PSWDANI));
                             break;
                         case 3:
-                            IO.println(patientUI.addPatient(new PatientDTO(25, Constants.MIKE, LocalDate.parse(Constants.DATEMIKE), Constants.PHONEMIKE, 0, Constants.USERMIKE, Constants.PSWMIKE)));
+                            patientUI.updatePatient(new PatientDTO(25, Constants.MIKE, LocalDate.parse(Constants.DATEMIKE), Constants.PHONEMIKE, 0, Constants.USERMIKE, Constants.PSWMIKE));
                             break;
                         case 4:
                             IO.println(Constants.INSERT_ID);
@@ -55,7 +56,7 @@ public class Main {
                             IO.println(medRecordUI.getMedRecords(id));
                             break;
                         case 7:
-                            IO.println((medRecordUI.addMedRecord(new MedRecordDTO())));
+                            medRecordUI.addMedRecord(new MedRecordDTO());
                             break;
                         case 8:
                             medRecordUI.updateMedRecord(new MedRecordDTO());
@@ -66,6 +67,7 @@ public class Main {
                             medRecordUI.deleteMedRecord(idMed);
                             break;
                         case 10:
+                            IO.println(Constants.CLOSINGCONECTION);
                             IO.println(Constants.EXITMENU);
                         default:
                             IO.println(Constants.ERROR);

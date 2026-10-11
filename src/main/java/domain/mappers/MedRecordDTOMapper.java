@@ -11,7 +11,7 @@ public class MedRecordDTOMapper {
         if (medRecordDTO.getDate() != null) {
             date = LocalDate.parse(medRecordDTO.getDate());
         }
-        return new MedRecord(medRecordDTO.getId(), medRecordDTO.getIdPatient(), medRecordDTO.getIdDoctor(), medRecordDTO.getDescription(), date);
+        return new MedRecord(medRecordDTO.getId(), medRecordDTO.getIdPatient(), medRecordDTO.getIdDoctor(), medRecordDTO.getDescription(), date, medRecordDTO.getMedications());
     }
 
     public MedRecordDTO entityToDto(MedRecord medRecord) {
