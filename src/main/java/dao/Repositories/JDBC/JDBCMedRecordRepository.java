@@ -48,8 +48,8 @@ public class JDBCMedRecordRepository implements MedRecordRepository {
     @Override
     public int addMedRecord (MedRecord medRecord){
        int medRecordId = 0;
-        try(Connection connection = dbconnection.getConnection()){
-            try (PreparedStatement ps=connection.prepareStatement(SQLQuery.INSERT_MEDRECORD, Statement.RETURN_GENERATED_KEYS);
+        try(Connection connection = dbconnection.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(SQLQuery.INSERT_MEDRECORD, Statement.RETURN_GENERATED_KEYS);
                  PreparedStatement ps2 = connection.prepareStatement(SQLQuery.INSERT_MEDICATION)) {
                 connection.setAutoCommit(false);
                 ps.setInt(1, medRecord.getPatient_id());
@@ -67,10 +67,12 @@ public class JDBCMedRecordRepository implements MedRecordRepository {
                         connection.commit();
                     }
                 }
-            } catch (SQLException ex){
-               Logger.getLogger(JDBCMedRecordRepository.class.getName()).log(Level.SEVERE, null, ex);
-               connection.rollback();
+            } catch (SQLException ex) {
+                Logger.getLogger(JDBCMedRecordRepository.class.getName()).log(Level.SEVERE, null, ex);
+                connection.rollback();
                 throw new DataBaseError(Constants.DATABASE_ERROR);
+            } finally {
+                connection.setAutoCommit(true);
             }
         }catch (SQLException e){
             throw new DataBaseError(Constants.DATABASE_ERROR);
@@ -79,37 +81,49 @@ public class JDBCMedRecordRepository implements MedRecordRepository {
     }
 
     @Override
-    public void updateMedRecord(MedRecord medRecord){
-        try(Connection con = dbconnection.getConnection()){
-            try (PreparedStatement ps = con.prepareStatement(SQLQuery.INSERT_MEDRECORD);
-                 PreparedStatement ps2= con.prepareStatement(SQLQuery.DELETE_MED_WHEN_RECORDID);
-                 PreparedStatement ps3= con.prepareStatement(SQLQuery.INSERT_MEDICATION)) {
+    public void updateMedRecord(MedRecord medRecord) {
+        try (Connection con = dbconnection.getConnection()) {
+            try (PreparedStatement ps = con.prepareStatement(SQLQuery.UPDATE_MEDRECORD);
+                 PreparedStatement ps2 = con.prepareStatement(SQLQuery.DELETE_MEDICATION);
+                 PreparedStatement ps3 = con.prepareStatement(SQLQuery.INSERT_MEDICATION)) {
+
                 con.setAutoCommit(false);
+
+                // 1. Actualizar el registro médico mediante UPDATE
                 ps.setInt(1, medRecord.getPatient_id());
                 ps.setInt(2, medRecord.getDoctor_id());
                 ps.setString(3, medRecord.getDiagnosis());
                 ps.setDate(4, Date.valueOf(medRecord.getAdmission_date()));
-                int affectedRows= ps.executeUpdate();
-                ResultSet rs = ps.getGeneratedKeys();
-                if (affectedRows>0){
-                    ps2.setString(1, medRecord.getMedications().get(rs.getInt(2)));
-                    for (int i = 0; i < medRecord.getMedications().size(); i++) {
-                        if (rs.next()) {
-                            int medRecordId = rs.getInt(1);
-                            ps2.setInt(1, medRecordId);
-                            ps2.setString(2, medRecord.getMedications().get(i));
-                            con.commit();
-                        }
-                    }
-                } else {
+                ps.setInt(5, medRecord.getId()); // Cláusula WHERE id = ?
+
+                int affectedRows = ps.executeUpdate();
+                if (affectedRows == 0) {
                     throw new IdMissMatchingError(Constants.IDMISSMATCHING);
                 }
-            } catch (SQLException ex){
+
+                // 2. Eliminar medicamentos antiguos asociados a este registro
+                ps2.setInt(1, medRecord.getId());
+                ps2.executeUpdate();
+
+                // 3. Insertar la lista actualizada de medicamentos
+                if (medRecord.getMedications() != null && !medRecord.getMedications().isEmpty()) {
+                    for (String medication : medRecord.getMedications()) {
+                        ps3.setInt(1, medRecord.getId());
+                        ps3.setString(2, medication);
+                        ps3.executeUpdate();
+                    }
+                }
+
+                // 4. Confirmar cambios
+                con.commit();
+
+            } catch (SQLException ex) {
                 Logger.getLogger(JDBCMedRecordRepository.class.getName()).log(Level.SEVERE, null, ex);
                 con.rollback();
                 throw new DataBaseError(Constants.DATABASE_ERROR);
+            } finally {
+                con.setAutoCommit(true);
             }
-
         } catch (SQLException e) {
             throw new DataBaseError(Constants.DATABASE_ERROR);
         }

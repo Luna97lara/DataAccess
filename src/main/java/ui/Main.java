@@ -59,7 +59,7 @@ public class Main {
                             medRecordUI.addMedRecord(new MedRecordDTO(3, 1, "Feo", LocalDate.parse("2005-07-07")));
                             break;
                         case 8:
-                            //medRecordUI.updateMedRecord(new MedRecordDTO());
+                            medRecordUI.updateMedRecord(new MedRecordDTO(1, "Feo actualizable", LocalDate.parse("2005-07-07"), 2, 1, null));
                             break;
                         case 9:
                             IO.println(Constants.INSERT_ID);

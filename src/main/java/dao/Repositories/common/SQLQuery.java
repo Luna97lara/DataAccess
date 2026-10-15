@@ -17,10 +17,9 @@ public class SQLQuery
     public static final String DELETE_MEDRECORD = "Delete from medical_records where patient_id = ?";
     public static final String DELETE_APPOINTMENT = "Delete from appointments where patient_id = ?";
     public static final String DELETE_PATIENTPAYMENTS = "Delete from patient_payments where patient_id = ?";
-    public static final String DELETE_MEDICATION = "Delete from prescribed_medication where record_id in (select record_id from medical_records where patient_id = ?)";
+    public static final String DELETE_MEDICATION = "Delete from prescribed_medications where record_id in (select record_id from medical_records where patient_id = ?)";
     public static final String DELETE_CREDENTIALS= "Delete from user_login where patient_id = ?";
-    public static final String INSERT_MEDICATION="Insert into prescribed_medication values (null, ?, ?, null)";
-    public static final String DELETE_MED_WHEN_RECORDID = "Delete from prescribed_medication where record_id = ?";
+    public static final String INSERT_MEDICATION = "INSERT INTO prescribed_medications (record_id, medication_name) VALUES (?, ?)";    public static final String DELETE_MED_WHEN_RECORDID = "Delete from prescribed_medication where record_id = ?";
     public static final String SELECT_MEDRECORD = "select * from medical_records where patient_id = ?";
-
+    public static final String UPDATE_MEDRECORD = "Update medical_records set patient_id = ?, doctor_id = ?, diagnosis = ?, admission_date = ? where record_id = ?";
 }
