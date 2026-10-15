@@ -86,26 +86,18 @@ public class JDBCMedRecordRepository implements MedRecordRepository {
             try (PreparedStatement ps = con.prepareStatement(SQLQuery.UPDATE_MEDRECORD);
                  PreparedStatement ps2 = con.prepareStatement(SQLQuery.DELETE_MEDICATION);
                  PreparedStatement ps3 = con.prepareStatement(SQLQuery.INSERT_MEDICATION)) {
-
                 con.setAutoCommit(false);
-
-                // 1. Actualizar el registro médico mediante UPDATE
                 ps.setInt(1, medRecord.getPatient_id());
                 ps.setInt(2, medRecord.getDoctor_id());
                 ps.setString(3, medRecord.getDiagnosis());
                 ps.setDate(4, Date.valueOf(medRecord.getAdmission_date()));
-                ps.setInt(5, medRecord.getId()); // Cláusula WHERE id = ?
-
+                ps.setInt(5, medRecord.getId());
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows == 0) {
                     throw new IdMissMatchingError(Constants.IDMISSMATCHING);
                 }
-
-                // 2. Eliminar medicamentos antiguos asociados a este registro
                 ps2.setInt(1, medRecord.getId());
                 ps2.executeUpdate();
-
-                // 3. Insertar la lista actualizada de medicamentos
                 if (medRecord.getMedications() != null && !medRecord.getMedications().isEmpty()) {
                     for (String medication : medRecord.getMedications()) {
                         ps3.setInt(1, medRecord.getId());
@@ -113,8 +105,6 @@ public class JDBCMedRecordRepository implements MedRecordRepository {
                         ps3.executeUpdate();
                     }
                 }
-
-                // 4. Confirmar cambios
                 con.commit();
 
             } catch (SQLException ex) {
