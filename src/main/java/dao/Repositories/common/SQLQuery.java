@@ -5,7 +5,7 @@ public class SQLQuery
     public static final String SELECT_FROM_PATIENTS = "select * from patients";
     public static final String SELECT_FROM_DOCTORS = "select * from doctors";
     public static final String INSERT_PATIENT = "Insert into patients (name, date_of_birth, phone) values (?, ?, ?)";
-    public static final String INSERT_CREDENTIALS = "Insert into user_login (username, password) values (?, ?)";
+    public static final String INSERT_CREDENTIALS = "Insert into user_login (username, password,patient_id) values (?, ?, ?)";
     public static final String UPDATE_PATIENT = "Update patients set name = ?, date_of_birth = ?, phone = ? where id = ?";
     public static final String DELETE_PATIENT = "Delete from patients where patient_id = ?";
     public static final String INSERT_DOCTOR = "Insert into doctors (name, specialization, phone) values (?, ?, ?)";

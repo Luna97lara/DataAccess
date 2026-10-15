@@ -49,7 +49,7 @@ public class JDBCMedRecordRepository implements MedRecordRepository {
     public int addMedRecord (MedRecord medRecord){
        int medRecordId = 0;
         try(Connection connection = dbconnection.getConnection()){
-            try (PreparedStatement ps=connection.prepareStatement(SQLQuery.INSERT_MEDRECORD);
+            try (PreparedStatement ps=connection.prepareStatement(SQLQuery.INSERT_MEDRECORD, Statement.RETURN_GENERATED_KEYS);
                  PreparedStatement ps2 = connection.prepareStatement(SQLQuery.INSERT_MEDICATION)) {
                 connection.setAutoCommit(false);
                 ps.setInt(1, medRecord.getPatient_id());
@@ -63,6 +63,7 @@ public class JDBCMedRecordRepository implements MedRecordRepository {
                         medRecordId = rs.getInt(1);
                         ps2.setInt(1, medRecordId);
                         ps2.setString(2, medRecord.getMedications().get(i));
+                        ps2.executeUpdate();
                         connection.commit();
                     }
                 }
@@ -74,7 +75,7 @@ public class JDBCMedRecordRepository implements MedRecordRepository {
         }catch (SQLException e){
             throw new DataBaseError(Constants.DATABASE_ERROR);
         }
-        return medRecordId;
+        return medRecordId=medRecord.getId();
     }
 
     @Override

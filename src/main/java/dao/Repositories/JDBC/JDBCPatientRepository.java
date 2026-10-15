@@ -51,10 +51,10 @@ public class JDBCPatientRepository implements PatientRepository {
                     ps.setString(1, patient.getName());
                     ps.setDate(2, Date.valueOf(patient.getBirthDate()));
                     ps.setString(3, patient.getPhone());
-                    ps.executeUpdate();
-                    int affectedRows =ps2.executeUpdate();
+                    int affectedRows = ps.executeUpdate();
+
                     if (affectedRows>0){
-                        ResultSet rs=ps2.getGeneratedKeys();
+                        ResultSet rs=ps.getGeneratedKeys();
                         if(rs.next()){
                             patient.setId(rs.getInt(1));
                             ps2.setString(1, patient.getCredentials().getUsername());
@@ -79,7 +79,7 @@ public class JDBCPatientRepository implements PatientRepository {
             Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
             throw new DataBaseError(Constants.DATABASE_ERROR);
         }
-        return id;
+        return id=patient.getId();
     }
 
 
@@ -95,9 +95,9 @@ public class JDBCPatientRepository implements PatientRepository {
                     ps.setDate(2, Date.valueOf(patient.getBirthDate()));
                     ps.setString(3, patient.getPhone());
                     ps.executeUpdate();
-                    int affectedRows =ps2.executeUpdate();
+                    int affectedRows =ps.executeUpdate();
                     if (affectedRows>0){
-                        ResultSet rs=ps2.getGeneratedKeys();
+                        ResultSet rs=ps.getGeneratedKeys();
                         if(rs.next()){
                             patient.setId(rs.getInt(1));
                             ps2.setString(1, patient.getCredentials().getUsername());

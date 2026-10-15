@@ -38,10 +38,10 @@ public class Main {
                             IO.println(Constants.LIST_OF_PATIENTS + patientUI.getPatients());
                             break;
                         case 2:
-                            patientUI.addPatient(new PatientDTO(0, Constants.DANI, LocalDate.parse(Constants.DATEDANI), Constants.PHONEDANI, 2, Constants.USERDANI, Constants.PSWDANI));
+                            patientUI.addPatient(new PatientDTO(Constants.DANI, LocalDate.parse(Constants.DATEDANI), Constants.PHONEDANI, 2, Constants.USERDANI, Constants.PSWDANI));
                             break;
                         case 3:
-                            patientUI.updatePatient(new PatientDTO(25, Constants.MIKE, LocalDate.parse(Constants.DATEMIKE), Constants.PHONEMIKE, 0, Constants.USERMIKE, Constants.PSWMIKE));
+                            patientUI.updatePatient(new PatientDTO(Constants.MIKE, LocalDate.parse(Constants.DATEMIKE), Constants.PHONEMIKE, 0, Constants.USERMIKE, Constants.PSWMIKE));
                             break;
                         case 4:
                             IO.println(Constants.INSERT_ID);
@@ -56,10 +56,10 @@ public class Main {
                             IO.println(medRecordUI.getMedRecords(id));
                             break;
                         case 7:
-                            medRecordUI.addMedRecord(new MedRecordDTO());
+                            medRecordUI.addMedRecord(new MedRecordDTO(3, 1, "Feo", LocalDate.parse("2005-07-07")));
                             break;
                         case 8:
-                            medRecordUI.updateMedRecord(new MedRecordDTO());
+                            //medRecordUI.updateMedRecord(new MedRecordDTO());
                             break;
                         case 9:
                             IO.println(Constants.INSERT_ID);

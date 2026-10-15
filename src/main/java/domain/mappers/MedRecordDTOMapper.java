@@ -9,7 +9,7 @@ public class MedRecordDTOMapper {
     public MedRecord dtoToEntity(MedRecordDTO medRecordDTO) {
         LocalDate date = null;
         if (medRecordDTO.getDate() != null) {
-            date = LocalDate.parse(medRecordDTO.getDate());
+            date = medRecordDTO.getDate();
         }
         return new MedRecord(medRecordDTO.getId(), medRecordDTO.getIdPatient(), medRecordDTO.getIdDoctor(), medRecordDTO.getDescription(), date, medRecordDTO.getMedications());
     }
@@ -19,6 +19,6 @@ public class MedRecordDTOMapper {
         if (medRecord.getAdmission_date() != null) {
             date = medRecord.getAdmission_date().toString();
         }
-        return new MedRecordDTO(medRecord.getId(), medRecord.getDiagnosis(), date, medRecord.getPatient_id(), medRecord.getDoctor_id(), null);
+        return new MedRecordDTO(medRecord.getId(), medRecord.getDiagnosis(), LocalDate.parse(date), medRecord.getPatient_id(), medRecord.getDoctor_id(), null);
     }
 }
