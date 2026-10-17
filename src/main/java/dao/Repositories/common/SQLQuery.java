@@ -6,10 +6,10 @@ public class SQLQuery
     public static final String SELECT_FROM_DOCTORS = "select * from doctors";
     public static final String INSERT_PATIENT = "Insert into patients (name, date_of_birth, phone) values (?, ?, ?)";
     public static final String INSERT_CREDENTIALS = "Insert into user_login (username, password,patient_id) values (?, ?, ?)";
-    public static final String UPDATE_PATIENT = "Update patients set name = ?, date_of_birth = ?, phone = ? where id = ?";
+    public static final String UPDATE_PATIENT = "Update patients set name = ?, date_of_birth = ?, phone = ? where patient_id = ?";
     public static final String DELETE_PATIENT = "Delete from patients where patient_id = ?";
     public static final String INSERT_DOCTOR = "Insert into doctors (name, specialization, phone) values (?, ?, ?)";
-    public static final String UPDATE_DOCTOR = "Update doctors set name = ?, specialization = ?, phone = ? where id = ?";
+    public static final String UPDATE_DOCTOR = "Update doctors set name = ?, specialization = ?, phone = ? where doctor_id = ?";
     public static final String DELETE_DOCTOR = "Delete from doctors where doctor_id = ?";
     public static final String CREDENTIAL_QUERY = "SELECT * FROM user_login WHERE username = ?";
     public static final String INSERT_MEDRECORD = "INSERT INTO medical_records (patient_id, doctor_id, diagnosis, admission_date) VALUES (?, ?, ?, ?)";

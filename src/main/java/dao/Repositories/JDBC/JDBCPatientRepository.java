@@ -87,13 +87,14 @@ public class JDBCPatientRepository implements PatientRepository {
     public void update(Patient patient) {
         try(Connection con = dbConnection.getConnection()){
             try {
-                PreparedStatement ps = con.prepareStatement(SQLQuery.UPDATE_PATIENT);
+                PreparedStatement ps = con.prepareStatement(SQLQuery.UPDATE_PATIENT, Statement.RETURN_GENERATED_KEYS);
                 PreparedStatement ps2 = con.prepareStatement(SQLQuery.UPDATE_CREDENTIALS);
                 {
                     con.setAutoCommit(false);
                     ps.setString(1, patient.getName());
                     ps.setDate(2, Date.valueOf(patient.getBirthDate()));
                     ps.setString(3, patient.getPhone());
+                    ps.setInt(4, patient.getId());
                     ps.executeUpdate();
                     int affectedRows =ps.executeUpdate();
                     if (affectedRows>0){
