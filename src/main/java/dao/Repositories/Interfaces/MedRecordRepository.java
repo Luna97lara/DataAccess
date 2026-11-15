@@ -10,4 +10,6 @@ public interface MedRecordRepository {
     int addMedRecord(MedRecord medRecord);
     void updateMedRecord(MedRecord medRecord);
     void deleteMedRecord(int idDelete, boolean confirm);
+
+    void restore(MedRecord medRecord);
 }

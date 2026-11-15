@@ -22,4 +22,12 @@ public class SQLQuery
     public static final String INSERT_MEDICATION = "INSERT INTO prescribed_medications (record_id, medication_name) VALUES (?, ?)";    public static final String DELETE_MED_WHEN_RECORDID = "Delete from prescribed_medication where record_id = ?";
     public static final String SELECT_MEDRECORD = "select * from medical_records where patient_id = ?";
     public static final String UPDATE_MEDRECORD = "Update medical_records set patient_id = ?, doctor_id = ?, diagnosis = ?, admission_date = ? where record_id = ?";
+    public static final String SELECT_APPOINTMENTS_BYPATIENTID = "select * from appointments where patient_id = ?";
+    public static final String RESTORE_APPOINTMENT ="insert into appointments (appointment_id, patient_id, doctor_id, appointment_date) VALUES (?, ?, ?, ?)";
+    public static final String SELECT_PAYMENTS_BYPATIENTID = "select * from patient_payments where patient_id = ?";
+    public static final String RESTORE_PAYMENT = "insert into patient_payments (payment_id, patient_id, amount, payment_date) VALUES (?, ?, ?, ?)";
+    public static final String SELECT_patient_QUERY = "select * from patients where patient_id=?";
+    public static final String INSERT_MEDRECORD_WITH_EXISTING_ID = "INSERT INTO medical_records (record_id,patient_id, doctor_id, diagnosis,admission_date) VALUES (?,?,?,?,?)";
+    public static final String INSERT_PATIENT_WITH_EXISTING_ID = "INSERT INTO patients (patient_id,name, date_of_birth, phone) VALUES (?,?,?,?)";
+
 }

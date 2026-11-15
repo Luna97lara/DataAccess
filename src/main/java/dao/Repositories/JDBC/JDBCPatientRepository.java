@@ -33,7 +33,7 @@ public class JDBCPatientRepository implements PatientRepository {
         try (Connection con = dbConnection.getConnection();
              Statement st = con.createStatement()){
             ResultSet rs = st.executeQuery(SQLQuery.SELECT_FROM_PATIENTS);
-            patients=patientSQLMapper.mapPatient(rs);
+            patients=patientSQLMapper.mapPatients(rs);
         }catch (SQLException ex){
             Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, ex);
             throw new DataBaseError(Constants.DATABASE_ERROR);
@@ -174,6 +174,53 @@ public class JDBCPatientRepository implements PatientRepository {
             throw new DataBaseError(Constants.DATABASE_ERROR);
 
         }
+    }
+
+    @Override
+    public Patient findById(int id) {
+        Patient patient = new Patient();
+        try (Connection c = dbConnection.getConnection();
+             PreparedStatement preparedStatement = c.prepareStatement(SQLQuery.SELECT_patient_QUERY)) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    patient = patientSQLMapper.mapPatient(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(JDBCCredentialRepository.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataBaseError(Constants.DATABASE_ERROR);
+        }
+
+        if (patient == null) {
+            throw new DataBaseError(Constants.MISSING_USER);
+        }
+        return patient;
+    }
+
+    @Override
+    public void restore(Patient patient) {
+        try (Connection c = dbConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(SQLQuery.INSERT_PATIENT_WITH_EXISTING_ID, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, patient.getId());
+            ps.setString(2, patient.getName());
+            ps.setDate(3, Date.valueOf(patient.getBirthDate()));
+            ps.setString(4, patient.getPhone());
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DataBaseError(Constants.DATABASE_ERROR);
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            if (e.getMessage().contains("unique_name_dob")) {
+                Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, e);
+                throw new DataBaseError(Constants.ERROR);
+            }
+        } catch (SQLException e) {
+
+            Logger.getLogger(JDBCPatientRepository.class.getName()).log(Level.SEVERE, null, e);
+            throw new DataBaseError(Constants.DATABASE_ERROR);
+        }
+
     }
 
 }

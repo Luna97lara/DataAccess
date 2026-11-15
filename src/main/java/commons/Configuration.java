@@ -12,7 +12,7 @@ import java.util.Properties;
 @Singleton
 public class Configuration {
 
-
+        private static Configuration instance=null;
         private Properties p;
 
         private Configuration() {
@@ -25,6 +25,13 @@ public class Configuration {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        public static Configuration getInstance() {
+            if(instance==null){
+                instance=new Configuration();
+            }
+            return instance;
         }
 
         public String getProperty(String clave) {

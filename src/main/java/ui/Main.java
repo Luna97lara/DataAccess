@@ -67,6 +67,14 @@ public class Main {
                             medRecordUI.deleteMedRecord(idMed);
                             break;
                         case 10:
+                            System.out.println(Constants.INSERT_ID);
+                            int patientId = sc.nextInt();
+                            patientUI.restore(patientId);
+                            break;
+                        case 11:
+                            System.out.println(patientUI.getRestorable());
+                            break;
+                        case 12:
                             IO.println(Constants.CLOSINGCONECTION);
                             IO.println(Constants.EXITMENU);
                         default:

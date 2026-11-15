@@ -12,7 +12,9 @@ public class Constants {
             7. Add MedRecord
             8. Update MedRecord
             9. Delete MedRecord
-            10. Exit
+            10.Restore Patient
+            11.Show previously deleted Patients
+            12. Exit
             Enter your choice:
             """;
     public static final String LIST_OF_PATIENTS = "List of patients: ";
@@ -41,4 +43,6 @@ public class Constants {
     public static final String PATIENT_WITH_MEDRECORDS = "This patient has medical records. Are you sure about the deletion? (Y/N)";
     public static final String DOCTOR_WITH_MEDRECORDS = "This doctor has medical records. Are you sure of the deletion? (Y/N)";
     public static final String MEDRECORD_WITH_MEDICATIONS = "This medical record has medication associated. Are you sure about deletion? (Y/N)";
+    public static final String XML_FILE_DOES_NOT_EXIST = "XML file does not exist";
+    public static final String MISSING_USER = "User not found";
 }

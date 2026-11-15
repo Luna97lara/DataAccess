@@ -153,4 +153,47 @@ public class JDBCMedRecordRepository implements MedRecordRepository {
         }
 
     }
+
+    @Override
+    public void restore(MedRecord medicalRecord){
+
+        try (Connection c = dbconnection.getConnection()) {
+            c.setAutoCommit(false);
+            try (PreparedStatement ps = c.prepareStatement(SQLQuery.INSERT_MEDRECORD_WITH_EXISTING_ID);
+                 PreparedStatement ps1 = c.prepareStatement(SQLQuery.INSERT_MEDICATION)
+            ) {
+                ps.setInt(1, medicalRecord.getId());
+                ps.setInt(2, medicalRecord.getPatient_id());
+                ps.setInt(3, medicalRecord.getDoctor_id());
+                ps.setString(4, medicalRecord.getDiagnosis());
+                ps.setDate(5, Date.valueOf(medicalRecord.getAdmission_date()));
+                int affectedRows = ps.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new DataBaseError(Constants.DATABASE_ERROR);
+                }
+
+                ps1.setInt(1, medicalRecord.getId());
+                ps1.setString(2, String.valueOf(medicalRecord.getMedications()));
+                ps1.setString(3, "5ml");
+                int affectedRows1 = ps1.executeUpdate();
+                if (affectedRows1 == 0) {
+                    throw new DataBaseError(Constants.DATABASE_ERROR);
+                }
+                c.commit();
+            } catch (DataBaseError e) {
+                c.rollback();
+                Logger.getLogger(JDBCMedRecordRepository.class.getName()).log(Level.SEVERE, null, e);
+                throw e;
+            } catch (SQLException e) {
+                c.rollback();
+                Logger.getLogger(JDBCMedRecordRepository.class.getName()).log(Level.SEVERE, null, e);
+                throw new DataBaseError(Constants.DATABASE_ERROR);
+            } finally {
+                c.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(JDBCMedRecordRepository.class.getName()).log(Level.SEVERE, null, e);
+            throw new DataBaseError(Constants.DATABASE_ERROR);
+        }
+    }
 }

@@ -1,6 +1,5 @@
 package dao.mappers;
 
-import dao.model.Credential;
 import dao.model.Patient;
 
 import java.sql.ResultSet;
@@ -9,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PatientSQLMapper {
-    public List<Patient> mapPatient(ResultSet rs) {
+    public List<Patient> mapPatients(ResultSet rs) {
         List<Patient> patients = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -24,6 +23,15 @@ public class PatientSQLMapper {
             e.printStackTrace();
         }
         return patients;
+    }
+
+    public Patient mapPatient(ResultSet rs) throws SQLException {
+        Patient patient = new Patient();
+        patient.setId(rs.getInt("patient_id"));
+        patient.setName(rs.getString("name"));
+        patient.setBirthDate(rs.getDate("date_of_birth").toLocalDate());
+        patient.setPhone(rs.getString("phone"));
+        return patient;
     }
 
 

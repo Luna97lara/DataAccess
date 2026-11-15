@@ -9,4 +9,7 @@ public interface PatientRepository {
     int add(Patient patient);
     void update(Patient patient);
     void delete(int idDelete, boolean confirm);
+    Patient findById(int id);
+
+    void restore(Patient patient);
 }

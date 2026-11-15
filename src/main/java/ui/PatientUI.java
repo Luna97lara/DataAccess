@@ -1,6 +1,7 @@
 package ui;
 
 import commons.Constants;
+import dao.xml.model.PatientElement;
 import domain.exceptions.AppError;
 import domain.exceptions.DataBaseError;
 import domain.exceptions.DuplicatedUsernameError;
@@ -66,11 +67,11 @@ public class PatientUI {
     }
     public void deletePatients(int idDelete){
         try {
-            patientService.deletePatients(idDelete, false);
+            patientService.deletePatient(idDelete, false);
         } catch (ForeignKeyERROR f){
             IO.println(Constants.PATIENT_WITH_MEDRECORDS);
             boolean confirm = scanner.nextLine().charAt(0) == 'Y';
-            patientService.deletePatients(idDelete, confirm);
+            patientService.deletePatient(idDelete, confirm);
         } catch (DataBaseError error) {
             Logger.getLogger(PatientUI.class.getName()).log(Level.SEVERE, null, error);
         }  catch (Exception e){
@@ -80,4 +81,19 @@ public class PatientUI {
     }
 
 
+    public void restore(int patientId) {
+        try{
+            patientService.restore(patientId);
+        } catch (DataBaseError ex) {
+            System.out.println(ex.getMessage());
+            Logger.getLogger(PatientUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            Logger.getLogger(PatientUI.class.getName()).log(Level.SEVERE, null, e);
+            throw new AppError(Constants.CRITICAL_ERROR + e.getMessage());
+        }
+    }
+
+    public List<PatientElement> getRestorable() {
+        return patientService.getRestorable();
+    }
 }
